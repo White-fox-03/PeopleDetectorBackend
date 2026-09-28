@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from peopledetectorbackend.router.router import router
 
 app = FastAPI()
 
@@ -6,6 +7,8 @@ current_state = {
     "count": 0,
     "image_b64": ""
 }
+
+app.include_router(router)
 
 def start():
     import uvicorn
