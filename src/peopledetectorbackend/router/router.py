@@ -8,8 +8,13 @@ from logging import Logger
 
 # Importaciones de tus módulos
 from peopledetectorbackend.model.detection import Detection
-from peopledetectorbackend.main import current_state
 from peopledetectorbackend.camera_logic import detector
+
+
+current_state = {
+    "count": 0,
+    "image_b64": ""
+}
 
 logger = Logger("router")
 router = APIRouter()
