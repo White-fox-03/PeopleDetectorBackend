@@ -1,33 +1,31 @@
-import cv2
 import numpy as np
 from imutils.object_detection import non_max_suppression
+from ultralytics import YOLO
 
-# Inicializar el modelo HOG + SVM una sola vez al cargar este módulo en memoria
-HOGCV = cv2.HOGDescriptor()
-HOGCV.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+modelo_yolo = YOLO("yolov8n.pt")  # Cargar el modelo YOLOv8 preentrenado
+
+
+
 
 def detector(image):
     """
     Recibe un frame de OpenCV y devuelve un array con las coordenadas 
-    de las personas detectadas.
+    de las personas detectadas en formato [x_inicial, y_inicial, x_final, y_final].
     """
-    # 1. Detectar posibles siluetas humanas
-    (rects, weights) = HOGCV.detectMultiScale(
-        image, 
-        winStride=(4, 4), 
-        padding=(8, 8), 
-        scale=1.05
-    )
+    # Ejecutar inferencia con YOLO
+    # classes=[0] filtra estrictamente solo "personas" (ID 0 en el dataset COCO)
+    # conf=0.5 requiere un 50% de certeza para evitar falsos positivos con sillas/objetos
+    # verbose=False evita que llene la consola del servidor con logs por cada frame
+    resultados = modelo_yolo.predict(image, classes=[0], conf=0.5, verbose=False)
     
-    # Si no se detecta nada, devolver un array vacío rápidamente
-    if len(rects) == 0:
-        return []
-
-    # 2. Convertir el formato (x, y, ancho, alto) a (x_inicial, y_inicial, x_final, y_final)
-    rects_array = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
+    coordenadas_personas = []
     
-    # 3. Aplicar Non-Maxima Suppression (NMS) para limpiar cuadros duplicados 
-    # sobre una misma persona
-    resultados = non_max_suppression(rects_array, probs=None, overlapThresh=0.65)
-    
-    return resultados
+    # Procesar el resultado de Ultralytics al formato que espera router.py
+    for resultado in resultados:
+        cajas = resultado.boxes
+        for caja in cajas:
+            # Extraer coordenadas y convertir a enteros
+            x1, y1, x2, y2 = caja.xyxy[0].cpu().numpy().astype(int)
+            coordenadas_personas.append([x1, y1, x2, y2])
+            
+    return coordenadas_personas

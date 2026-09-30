@@ -13,6 +13,7 @@ dependencies = [
     "opencv-contrib-python-headless>=5.0.0.93",
     "pydantic>=2.13.5",
     "typer>=0.27.2",
+    "ultralytics>=8.4.168",
     "uvicorn>=0.54.0",
 ]
 
