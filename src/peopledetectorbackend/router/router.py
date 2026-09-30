@@ -29,10 +29,7 @@ async def update_count(data: Detection):
 
         if frame is None:
             raise HTTPException(status_code=400, detail="Imagen inválida o corrupta")
-
-        # Mantener el límite de tamaño para evitar saturar el CPU del servidor
-        frame = imutils.resize(frame, width=min(400, frame.shape[1]))
-
+        
         # ---> GIRA LA IMAGEN 90 GRADOS A LA DERECHA PARA ENDEREZARLA <---
         frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
