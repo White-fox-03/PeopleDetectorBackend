@@ -1,8 +1,6 @@
-import numpy as np
-from imutils.object_detection import non_max_suppression
 from ultralytics import YOLO
 
-modelo_yolo = YOLO("yolov8n.pt")  # Cargar el modelo YOLOv8 preentrenado
+modelo_yolo = YOLO("yolov8s.pt")  # Cargar el modelo YOLOv8 preentrenado
 
 
 
@@ -16,7 +14,7 @@ def detector(image):
     # classes=[0] filtra estrictamente solo "personas" (ID 0 en el dataset COCO)
     # conf=0.5 requiere un 50% de certeza para evitar falsos positivos con sillas/objetos
     # verbose=False evita que llene la consola del servidor con logs por cada frame
-    resultados = modelo_yolo.predict(image, classes=[0], conf=0.5, verbose=False)
+    resultados = modelo_yolo.predict(image, classes=[0], conf=0.35, verbose=False)
     
     coordenadas_personas = []
     

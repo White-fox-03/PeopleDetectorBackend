@@ -45,7 +45,7 @@ async def update_count(data: Detection):
             cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
 
         # 4. Volver a convertir el frame (ya procesado con cuadros) a Base64
-        _, img_encoded = cv2.imencode('.png', frame)
+        _, img_encoded = cv2.imencode('.jpg', frame)
         frame_procesado_b64 = base64.b64encode(img_encoded).decode('utf-8')
 
         # 5. Sobrescribir el estado global en memoria
@@ -67,8 +67,8 @@ async def get_dashboard():
         <head><title>People Detector Dashboard</title></head>
         <body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
             <h1>Personas detectadas: {current_state.get('count', 0)}</h1>
-            <img src="data:image/png;base64,{current_state.get('image_b64', '')}"
-            style="border: 2px solid #333; border-radius: 8px; width: 640px; height: auto; background-color: #f0f0f0;" />
+            <img src="data:image/jpeg;base64,{current_state.get('image_b64', '')}"
+style="border: 2px solid #333; border-radius: 8px; max-height: 80vh; width: auto; background-color: #f0f0f0;" />
             <script>
                 // Actualiza cada 2 segundos
                 setTimeout(function(){{ window.location.reload(1); }}, 2000);
