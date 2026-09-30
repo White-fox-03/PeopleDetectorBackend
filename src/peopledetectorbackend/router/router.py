@@ -31,7 +31,7 @@ async def update_count(data: Detection):
             raise HTTPException(status_code=400, detail="Imagen inválida o corrupta")
         
         # ---> GIRA LA IMAGEN 90 GRADOS A LA DERECHA PARA ENDEREZARLA <---
-        frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+        #frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
         # 2. Extraer los datos mediante la lógica importada
         resultados = detector(frame)
