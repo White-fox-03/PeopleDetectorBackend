@@ -8,7 +8,7 @@ from logging import Logger
 
 # Importaciones de tus módulos
 from peopledetectorbackend.model.detection import Detection
-from peopledetectorbackend.camera_logic import detector
+
 
 current_state = {
     "count": 0,
